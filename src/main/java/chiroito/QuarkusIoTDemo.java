@@ -65,7 +65,7 @@ public class QuarkusIoTDemo {
         fan.start();
         led.run();
 
-        scheduledExecutorService.schedule(monitorTask, 1, TimeUnit.SECONDS);
+        scheduledExecutorService.scheduleAtFixedRate(monitorTask,1, 1, TimeUnit.SECONDS);
     }
 
     void onStop(@Observes ShutdownEvent ev) {

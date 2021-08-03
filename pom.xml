@@ -11,14 +11,14 @@
         <failOnMissingWebXml>false</failOnMissingWebXml>
         <maven.compiler.source>11</maven.compiler.source>
         <final.name>rasp</final.name>
-        <version.quarkus>1.7.0.Final</version.quarkus>
+        <version.quarkus>1.13.7.Final</version.quarkus>
         <pi4j.version>1.4</pi4j.version>
     </properties>
     <dependencies>
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-resteasy</artifactId>
-            <version>1.13.7.Final</version>
+            <version>${version.quarkus}</version>
         </dependency>
         <dependency>
             <groupId>io.quarkus</groupId>

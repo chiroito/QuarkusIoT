@@ -16,7 +16,7 @@ import javax.inject.Singleton;
 public class RaspFan implements Fan {
 
     final GpioController gpio = GpioFactory.getInstance();
-    final GpioPinPwmOutput fanPin = gpio.provisionSoftPwmOutputPin(RaspiPin.GPIO_28);
+    final GpioPinPwmOutput fanPin = gpio.provisionSoftPwmOutputPin(RaspiPin.GPIO_25);
     private boolean isRunning;
 
     @PostConstruct
