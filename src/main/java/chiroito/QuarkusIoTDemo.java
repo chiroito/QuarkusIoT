@@ -42,30 +42,40 @@ public class QuarkusIoTDemo {
 
     void onStart(@Observes StartupEvent ev) {
 
-        button.setTrigger(e->{
+        button.setTrigger(e -> {
             fan.start();
             led.run();
             System.out.println("ボタンのトリガーが実行されました");
         });
 
-        Runnable monitorTask = () -> {
-            try {
-                if (temparature.get() >= 28) {
-                    fan.stop();
-                    led.error();
-                    System.out.println("定期監視で28℃を超えました");
-                } else {
-                    System.out.println("定期監視で温度が達しませんでした");
+        Runnable monitorTask = new Runnable() {
+            private boolean isOverThreshold = false;
+
+            public void run() {
+                try {
+                    if (temparature.get() >= 28) {
+                        fan.stop();
+                        led.error();
+                        if (isOverThreshold == false) {
+                            System.out.println("定期監視で28℃を超えました");
+                        }
+                        isOverThreshold = true;
+                    } else {
+                        if (isOverThreshold == true) {
+                            System.out.println("定期監視で温度が達しませんでした");
+                        }
+                        isOverThreshold = false;
+                    }
+                } catch (DeviceException e) {
+                    Quarkus.blockingExit();
                 }
-            } catch (DeviceException e) {
-                Quarkus.blockingExit();
             }
         };
 
         fan.start();
         led.run();
 
-        scheduledExecutorService.scheduleAtFixedRate(monitorTask,1, 1, TimeUnit.SECONDS);
+        scheduledExecutorService.scheduleAtFixedRate(monitorTask, 1, 1, TimeUnit.SECONDS);
     }
 
     void onStop(@Observes ShutdownEvent ev) {

@@ -18,7 +18,7 @@ public class RaspTemparature implements Temparature {
     private I2CDevice device;
     private static final byte address_adt7410 = 0x48;
     private static final byte register_adt7410 = 0x00;
-    private double currentTemparature;
+    private double lastTimeTemparature;
 
     private double readAdt7410() throws IOException {
 
@@ -49,8 +49,11 @@ public class RaspTemparature implements Temparature {
     @Override
     public double get() throws DeviceException {
         try {
-            currentTemparature = readAdt7410();
-            System.out.println("温度は"+currentTemparature+"℃でした");
+            double currentTemparature = readAdt7410();
+            if(currentTemparature != lastTimeTemparature) {
+                System.out.println("温度は" + currentTemparature + "℃に変りました");
+            }
+            lastTimeTemparature = currentTemparature;
             return currentTemparature;
         } catch (IOException e) {
             DeviceException de = new DeviceException("デバイスの情報取得に失敗しました");
