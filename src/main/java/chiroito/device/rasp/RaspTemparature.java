@@ -5,9 +5,10 @@ import chiroito.device.Temparature;
 import com.pi4j.io.i2c.I2CBus;
 import com.pi4j.io.i2c.I2CDevice;
 import com.pi4j.io.i2c.I2CFactory;
+import org.eclipse.microprofile.metrics.MetricUnits;
+import org.eclipse.microprofile.metrics.annotation.Gauge;
 
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Singleton;
 import java.io.IOException;
 
@@ -17,6 +18,7 @@ public class RaspTemparature implements Temparature {
     private I2CDevice device;
     private static final byte address_adt7410 = 0x48;
     private static final byte register_adt7410 = 0x00;
+    private double currentTemparature;
 
     private double readAdt7410() throws IOException {
 
@@ -47,11 +49,17 @@ public class RaspTemparature implements Temparature {
     @Override
     public double get() throws DeviceException {
         try {
-            return readAdt7410();
+            currentTemparature = readAdt7410();
+            return currentTemparature;
         } catch (IOException e) {
             DeviceException de = new DeviceException("デバイスの情報取得に失敗しました");
             de.addSuppressed(e);
             throw de;
         }
+    }
+
+    @Gauge(name = "Temparature", unit = MetricUnits.NONE)
+    public Double getTemparature(){
+        return currentTemparature;
     }
 }

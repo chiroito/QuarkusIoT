@@ -2,6 +2,8 @@ package chiroito.device.rasp;
 
 import chiroito.device.Led;
 import com.pi4j.io.gpio.*;
+import org.eclipse.microprofile.metrics.MetricUnits;
+import org.eclipse.microprofile.metrics.annotation.Gauge;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
@@ -16,6 +18,10 @@ public class RaspLed implements Led {
     final GpioPinPwmOutput greenPin = gpio.provisionSoftPwmOutputPin(RaspiPin.GPIO_06);
     final GpioPinPwmOutput bluePin = gpio.provisionSoftPwmOutputPin(RaspiPin.GPIO_05);
 
+    private int green;
+    private int blue;
+    private int red;
+
     @PostConstruct
     public void init() {
         redPin.setShutdownOptions(true);
@@ -25,22 +31,40 @@ public class RaspLed implements Led {
 
     @Override
     public void run() {
-        redPin.setPwm(0);
-        greenPin.setPwm(100);
-        bluePin.setPwm(0);
+        apply(0, 100, 0);
     }
 
     @Override
     public void warn() {
-        redPin.setPwm(70);
-        greenPin.setPwm(70);
-        bluePin.setPwm(0);
+        apply(70, 70, 0);
     }
 
     @Override
     public void error() {
-        redPin.setPwm(100);
-        greenPin.setPwm(0);
-        bluePin.setPwm(0);
+        apply(100, 0, 0);
+    }
+
+    private void apply(int red, int green, int blue) {
+        this.red = red;
+        this.green = green;
+        this.blue = blue;
+        redPin.setPwm(red);
+        greenPin.setPwm(green);
+        bluePin.setPwm(blue);
+    }
+
+    @Gauge(name = "LedRed", unit = MetricUnits.NONE)
+    public int getRed() {
+        return red;
+    }
+
+    @Gauge(name = "LedGreen", unit = MetricUnits.NONE)
+    public int getGreen() {
+        return green;
+    }
+
+    @Gauge(name = "LedBlue", unit = MetricUnits.NONE)
+    public int getBlue() {
+        return blue;
     }
 }
