@@ -8,8 +8,9 @@ import com.pi4j.io.gpio.RaspiPin;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Singleton;
 
-@ApplicationScoped
+@Singleton
 public class RaspFan implements Fan {
 
     final GpioController gpio = GpioFactory.getInstance();

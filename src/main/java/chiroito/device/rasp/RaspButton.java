@@ -8,9 +8,10 @@ import com.pi4j.io.gpio.event.GpioPinListenerDigital;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Singleton;
 import java.util.function.Consumer;
 
-@ApplicationScoped
+@Singleton
 public class RaspButton implements Button {
 
     final GpioController gpio = GpioFactory.getInstance();

@@ -8,9 +8,10 @@ import com.pi4j.io.i2c.I2CFactory;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Singleton;
 import java.io.IOException;
 
-@ApplicationScoped
+@Singleton
 public class RaspTemparature implements Temparature {
 
     private I2CDevice device;

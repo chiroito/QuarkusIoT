@@ -5,8 +5,9 @@ import com.pi4j.io.gpio.*;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Singleton;
 
-@ApplicationScoped
+@Singleton
 public class RaspLed implements Led {
 
     final GpioController gpio = GpioFactory.getInstance();
