@@ -57,9 +57,4 @@ public class RaspTemparature implements Temparature {
             throw de;
         }
     }
-
-    @Gauge(name = "Temparature", unit = MetricUnits.NONE)
-    public Double getTemparature(){
-        return currentTemparature;
-    }
 }
