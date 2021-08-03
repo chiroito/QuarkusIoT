@@ -54,9 +54,9 @@ public class QuarkusIoTDemo {
             public void run() {
                 try {
                     if (temparature.get() >= 28) {
-                        fan.stop();
-                        led.error();
                         if (isOverThreshold == false) {
+                            fan.stop();
+                            led.error();
                             System.out.println("定期監視で28℃を超えました");
                         }
                         isOverThreshold = true;
