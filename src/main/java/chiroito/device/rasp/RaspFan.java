@@ -23,11 +23,11 @@ public class RaspFan implements Fan {
 
     @Override
     public void stop() {
-        fanPin.setPwmRange(0);
+        fanPin.setPwm(0);
     }
 
     @Override
     public void start() {
-        fanPin.setPwmRange(70);
+        fanPin.setPwm(70);
     }
 }
