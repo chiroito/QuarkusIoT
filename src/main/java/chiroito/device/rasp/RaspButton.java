@@ -27,6 +27,9 @@ public class RaspButton implements Button {
             public void handleGpioPinDigitalStateChangeEvent(GpioPinDigitalStateChangeEvent event){
                 if(event.getState().isHigh()){
                     trigger.accept(null);
+                    System.out.println("Buttonのトリガーでコールバックを実行した");
+                } else {
+                    System.out.println("Buttonのトリガーで何もしない");
                 }
             }
         };

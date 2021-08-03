@@ -28,12 +28,14 @@ public class RaspFan implements Fan {
     public void stop() {
         fanPin.setPwm(0);
         this.isRunning = false;
+        System.out.println("Fanを停止しました");
     }
 
     @Override
     public void start() {
         fanPin.setPwm(70);
         this.isRunning = true;
+        System.out.println("Fanを動かしました");
     }
 
     @Gauge(name="FanRunning", unit = MetricUnits.NONE)

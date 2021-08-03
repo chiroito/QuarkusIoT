@@ -50,6 +50,7 @@ public class RaspTemparature implements Temparature {
     public double get() throws DeviceException {
         try {
             currentTemparature = readAdt7410();
+            System.out.println("温度は"+currentTemparature+"℃でした");
             return currentTemparature;
         } catch (IOException e) {
             DeviceException de = new DeviceException("デバイスの情報取得に失敗しました");

@@ -45,13 +45,17 @@ public class QuarkusIoTDemo {
         button.setTrigger(e->{
             fan.start();
             led.run();
+            System.out.println("ボタンのトリガーが実行されました");
         });
 
         Runnable monitorTask = () -> {
             try {
-                if (temparature.get() > 28) {
+                if (temparature.get() >= 28) {
                     fan.stop();
                     led.error();
+                    System.out.println("定期監視で28℃を超えました");
+                } else {
+                    System.out.println("定期監視で温度が達しませんでした");
                 }
             } catch (DeviceException e) {
                 Quarkus.blockingExit();

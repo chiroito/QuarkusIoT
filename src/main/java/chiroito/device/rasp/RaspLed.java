@@ -32,16 +32,19 @@ public class RaspLed implements Led {
     @Override
     public void run() {
         apply(0, 100, 0);
+        System.out.println("LEDはRunになりました");
     }
 
     @Override
     public void warn() {
         apply(70, 70, 0);
+        System.out.println("LEDはWarnになりました");
     }
 
     @Override
     public void error() {
         apply(100, 0, 0);
+        System.out.println("LEDはErrorになりました");
     }
 
     private void apply(int red, int green, int blue) {
