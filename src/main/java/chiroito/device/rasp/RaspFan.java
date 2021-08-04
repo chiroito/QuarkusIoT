@@ -17,7 +17,7 @@ public class RaspFan implements Fan {
 
     final GpioController gpio = GpioFactory.getInstance();
     final GpioPinPwmOutput fanPin = gpio.provisionSoftPwmOutputPin(RaspiPin.GPIO_25);
-    private boolean isRunning;
+    private int powerPercentage;
 
     @PostConstruct
     public void init() {
@@ -27,19 +27,19 @@ public class RaspFan implements Fan {
     @Override
     public void stop() {
         fanPin.setPwm(0);
-        this.isRunning = false;
+        this.powerPercentage = 0;
         System.out.println("Fanを停止しました");
     }
 
     @Override
     public void start() {
         fanPin.setPwm(70);
-        this.isRunning = true;
+        this.powerPercentage = 70;
         System.out.println("Fanを動かしました");
     }
 
-    @Gauge(name="FanRunning", unit = MetricUnits.NONE)
-    public Boolean isRunning() {
-        return this.isRunning;
+    @Gauge(name="FanPowerPercentage", unit = MetricUnits.NONE)
+    public Integer getPowerPercentage() {
+        return this.powerPercentage;
     }
 }
