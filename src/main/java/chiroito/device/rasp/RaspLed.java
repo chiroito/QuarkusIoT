@@ -37,7 +37,7 @@ public class RaspLed implements Led {
 
     @Override
     public void warn() {
-        apply(100, 100, 0);
+        apply(100, 70, 0);
         System.out.println("LEDはWarnになりました");
     }
 
