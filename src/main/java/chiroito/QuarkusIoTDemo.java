@@ -1,9 +1,6 @@
 package chiroito;
 
-import chiroito.device.Button;
-import chiroito.device.Fan;
-import chiroito.device.Led;
-import chiroito.device.Temparature;
+import chiroito.device.*;
 import com.pi4j.io.gpio.*;
 
 import com.pi4j.io.i2c.I2CBus;
@@ -38,14 +35,23 @@ public class QuarkusIoTDemo {
     @Inject
     Temparature temparature;
 
+    @Inject
+    BrokeFanButton brokeFanButton;
+
     final ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
 
     void onStart(@Observes StartupEvent ev) {
 
         button.setTrigger(e -> {
+            System.out.println("ボタンのトリガーが実行されました");
             fan.start();
             led.run();
+        });
+
+        brokeFanButton.setTrigger(e-> {
             System.out.println("ボタンのトリガーが実行されました");
+            fan.stop();
+            led.error();
         });
 
         Runnable monitorTask = new Runnable() {
@@ -55,9 +61,10 @@ public class QuarkusIoTDemo {
                 try {
                     if (temparature.get() >= 28) {
                         if (isOverThreshold == false) {
-                            fan.stop();
-                            led.error();
                             System.out.println("定期監視で28℃を超えました");
+                            //ここはマイクロサービスに置き換える
+                            fan.stop();
+                            led.warn();
                         }
                         isOverThreshold = true;
                     } else {

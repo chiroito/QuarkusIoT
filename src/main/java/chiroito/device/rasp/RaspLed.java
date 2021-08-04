@@ -31,13 +31,13 @@ public class RaspLed implements Led {
 
     @Override
     public void run() {
-        apply(0, 100, 0);
+        apply(0, 0, 100);
         System.out.println("LEDはRunになりました");
     }
 
     @Override
     public void warn() {
-        apply(70, 70, 0);
+        apply(100, 100, 0);
         System.out.println("LEDはWarnになりました");
     }
 
