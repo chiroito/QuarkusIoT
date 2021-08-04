@@ -26,16 +26,16 @@ public class RaspTemparature implements Temparature {
         int data = ((word_data & 0xff00) >> 8) | ((word_data & 0xff) << 8);
         data = data >> 3;
         double temperature = 0.0f;
-        if( (data & 0x1000) == 0){
-            temperature = ((double)data) * 0.0625f;
+        if ((data & 0x1000) == 0) {
+            temperature = ((double) data) * 0.0625f;
         } else {
-            temperature = ((double)((~data & 0x1fff) + 1)) * -0.0625f;
+            temperature = ((double) ((~data & 0x1fff) + 1)) * -0.0625f;
         }
         return temperature;
     }
 
     @PostConstruct
-    public void init() throws DeviceException{
+    public void init() throws DeviceException {
         try {
             I2CBus i2cBus = I2CFactory.getInstance(I2CBus.BUS_1);
             this.device = i2cBus.getDevice(address_adt7410);
@@ -50,7 +50,7 @@ public class RaspTemparature implements Temparature {
     public double get() throws DeviceException {
         try {
             double currentTemparature = readAdt7410();
-            if(currentTemparature != lastTimeTemparature) {
+            if (currentTemparature != lastTimeTemparature) {
                 System.out.println("温度は" + currentTemparature + "℃に変りました");
             }
             lastTimeTemparature = currentTemparature;
@@ -60,5 +60,10 @@ public class RaspTemparature implements Temparature {
             de.addSuppressed(e);
             throw de;
         }
+    }
+
+    @Gauge(name = "LastTimeTemparature", unit = MetricUnits.NONE)
+    public double getLastTimeTemparature() {
+        return lastTimeTemparature;
     }
 }
