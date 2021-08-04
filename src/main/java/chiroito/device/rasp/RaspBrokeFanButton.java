@@ -7,8 +7,10 @@ import com.pi4j.io.gpio.event.GpioPinListener;
 import com.pi4j.io.gpio.event.GpioPinListenerDigital;
 
 import javax.annotation.PostConstruct;
+import javax.inject.Singleton;
 import java.util.function.Consumer;
 
+@Singleton
 public class RaspBrokeFanButton implements BrokeFanButton {
 
     final GpioController gpio = GpioFactory.getInstance();
