@@ -15,8 +15,8 @@ import javax.inject.Singleton;
 public class RaspFan implements Fan {
 
     final GpioController gpio = GpioFactory.getInstance();
-    final GpioPinPwmOutput p0 = gpio.provisionSoftPwmOutputPin(RaspiPin.GPIO_24);
-    final GpioPinPwmOutput p1 = gpio.provisionSoftPwmOutputPin(RaspiPin.GPIO_25);
+    final GpioPinPwmOutput p0 = gpio.provisionSoftPwmOutputPin(RaspiPin.GPIO_02);
+    final GpioPinPwmOutput p1 = gpio.provisionSoftPwmOutputPin(RaspiPin.GPIO_03);
     private int powerPercentage;
 
     @PostConstruct
