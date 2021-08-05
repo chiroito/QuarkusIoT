@@ -2,17 +2,14 @@ package chiroito;
 
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
-import javax.ws.rs.FormParam;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
 import java.util.concurrent.CompletionStage;
 
 @Path("/")
 @RegisterRestClient
 public interface DeviceMonitorService {
 
-    @POST
+    @GET
     @Path("/rest")
-    void postInfo(@FormParam("temparature") double temparature, @FormParam("fanSpeed") int fanSpeed, @FormParam("deviceName") String deviceName);
+    void postInfo(@QueryParam("temparature") double temparature, @QueryParam("fanSpeed") int fanSpeed, @QueryParam("deviceName") String deviceName);
 }
