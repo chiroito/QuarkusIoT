@@ -67,7 +67,7 @@ public class QuarkusIoTDemo {
 
     private boolean isOverThreshold = false;
 
-    @Scheduled(every = "1s")
+    @Scheduled(every = "5s")
     public void monitor() {
         try {
             if (temparature.get() >= 28) {

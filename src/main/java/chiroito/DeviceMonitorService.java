@@ -3,6 +3,7 @@ package chiroito;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
 import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
 import java.util.concurrent.CompletionStage;
 
 @Path("/")
@@ -11,5 +12,7 @@ public interface DeviceMonitorService {
 
     @GET
     @Path("/rest")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.TEXT_PLAIN)
     void postInfo(@QueryParam("temparature") double temparature, @QueryParam("fanSpeed") int fanSpeed, @QueryParam("deviceName") String deviceName);
 }
