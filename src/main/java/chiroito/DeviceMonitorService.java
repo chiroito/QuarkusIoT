@@ -14,5 +14,5 @@ public interface DeviceMonitorService {
 
     @POST
     @Path("/rest")
-    CompletionStage<Void> postInfo(@FormParam("temparature") double temparature, @FormParam("fanSpeed") int fanSpeed, @FormParam("deviceName") String deviceName);
+    void postInfo(@FormParam("temparature") double temparature, @FormParam("fanSpeed") int fanSpeed, @FormParam("deviceName") String deviceName);
 }
