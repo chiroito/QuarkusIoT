@@ -68,13 +68,13 @@ public class QuarkusIoTDemo {
     private boolean isOverThreshold = false;
 
     @Scheduled(every = "1s")
-    private CompletionStage<Void> monitor() {
+    private void monitor() {
         try {
             if (temparature.get() >= 28) {
                 if (isOverThreshold == false) {
                     System.out.println("定期監視で28℃を超えました");
                     //ここはマイクロサービスに置き換える
-                    return monitorService.postInfo(temparature.getLastTime(), fan.getPowerPercentage(), server );
+                    monitorService.postInfo(temparature.getLastTime(), fan.getPowerPercentage(), server );
 //                    fan.stop();
 //                    led.warn();
                 }
@@ -88,7 +88,6 @@ public class QuarkusIoTDemo {
         } catch (DeviceException e) {
             Quarkus.blockingExit();
         }
-        return new CompletableFuture<Void>().thenAccept(c->{});
     }
 
     void onStop(@Observes ShutdownEvent ev) {
