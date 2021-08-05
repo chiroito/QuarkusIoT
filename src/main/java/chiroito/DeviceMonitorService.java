@@ -12,7 +12,7 @@ public interface DeviceMonitorService {
 
     @GET
     @Path("/rest")
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.TEXT_PLAIN)
     @Consumes(MediaType.TEXT_PLAIN)
     void postInfo(@QueryParam("temparature") double temparature, @QueryParam("fanSpeed") int fanSpeed, @QueryParam("deviceName") String deviceName);
 }
