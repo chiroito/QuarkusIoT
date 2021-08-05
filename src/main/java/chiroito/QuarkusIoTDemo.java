@@ -11,11 +11,15 @@ import io.quarkus.runtime.QuarkusApplication;
 import io.quarkus.runtime.ShutdownEvent;
 import io.quarkus.runtime.StartupEvent;
 import io.quarkus.runtime.annotations.QuarkusMain;
+import io.quarkus.scheduler.Scheduled;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import java.io.IOException;
+import java.util.concurrent.CompletionStage;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -38,7 +42,12 @@ public class QuarkusIoTDemo {
     @Inject
     BrokeFanButton brokeFanButton;
 
-    final ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
+    @ConfigProperty(name = "iot.server", defaultValue = "localhost:8080")
+    String server;
+
+    @Inject
+    @RestClient
+    DeviceMonitorService monitorService;
 
     void onStart(@Observes StartupEvent ev) {
 
@@ -48,44 +57,43 @@ public class QuarkusIoTDemo {
             led.run();
         });
 
-        brokeFanButton.setTrigger(e-> {
+        brokeFanButton.setTrigger(e -> {
             System.out.println("ボタンのトリガーが実行されました");
             fan.stop();
             led.error();
         });
 
-        Runnable monitorTask = new Runnable() {
-            private boolean isOverThreshold = false;
-
-            public void run() {
-                try {
-                    if (temparature.get() >= 28) {
-                        if (isOverThreshold == false) {
-                            System.out.println("定期監視で28℃を超えました");
-                            //ここはマイクロサービスに置き換える
-                            fan.stop();
-                            led.warn();
-                        }
-                        isOverThreshold = true;
-                    } else {
-                        if (isOverThreshold == true) {
-                            System.out.println("定期監視で温度が達しませんでした");
-                        }
-                        isOverThreshold = false;
-                    }
-                } catch (DeviceException e) {
-                    Quarkus.blockingExit();
-                }
-            }
-        };
-
         fan.start();
         led.run();
 
-        scheduledExecutorService.scheduleAtFixedRate(monitorTask, 1, 1, TimeUnit.SECONDS);
+    }
+
+    private boolean isOverThreshold = false;
+
+    @Scheduled(every = "1s")
+    private CompletionStage<Void> monitor() {
+        try {
+            if (temparature.get() >= 28) {
+                if (isOverThreshold == false) {
+                    System.out.println("定期監視で28℃を超えました");
+                    //ここはマイクロサービスに置き換える
+                    return monitorService.postInfo(temparature.getLastTime(), fan.getPowerPercentage(), server );
+//                    fan.stop();
+//                    led.warn();
+                }
+                isOverThreshold = true;
+            } else {
+                if (isOverThreshold == true) {
+                    System.out.println("定期監視で温度が達しませんでした");
+                }
+                isOverThreshold = false;
+            }
+        } catch (DeviceException e) {
+            Quarkus.blockingExit();
+        }
+        return null;
     }
 
     void onStop(@Observes ShutdownEvent ev) {
-        scheduledExecutorService.shutdownNow();
     }
 }

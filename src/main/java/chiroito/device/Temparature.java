@@ -4,4 +4,5 @@ import chiroito.DeviceException;
 
 public interface Temparature {
     double get() throws DeviceException;
+    double getLastTime();
 }

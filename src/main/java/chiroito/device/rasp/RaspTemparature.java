@@ -62,6 +62,11 @@ public class RaspTemparature implements Temparature {
         }
     }
 
+    @Override
+    public double getLastTime() {
+        return this.lastTimeTemparature;
+    }
+
     @Gauge(name = "LastTimeTemparature", unit = MetricUnits.NONE)
     public double getLastTimeTemparature() {
         return lastTimeTemparature;
