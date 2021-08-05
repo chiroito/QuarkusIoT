@@ -19,10 +19,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import java.io.IOException;
-import java.util.concurrent.CompletionStage;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 @ApplicationScoped
 public class QuarkusIoTDemo {
@@ -91,7 +88,7 @@ public class QuarkusIoTDemo {
         } catch (DeviceException e) {
             Quarkus.blockingExit();
         }
-        return null;
+        return new CompletableFuture<Void>().thenAccept(c->{});
     }
 
     void onStop(@Observes ShutdownEvent ev) {
